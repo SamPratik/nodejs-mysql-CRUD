@@ -1,0 +1,25 @@
+<% include partials/header %>
+<body>
+  <% include partials/nav %>
+
+  <div class="container">
+    <form class="" action="/add-item" method="post">
+      <div class="form-group">
+        <label for="">First Name:</label>
+        <input name="fn" type="text" class="form-control" placeholder="">
+      </div>
+      <div class="form-group">
+        <label for="">Last Name:</label>
+        <input name="ln" type="text" class="form-control" placeholder="">
+      </div>
+      <div class="form-group">
+        <label for="">Email:</label>
+        <input type="email" name="email" class="form-control" placeholder="">
+      </div>
+      <div class="form-group">
+        <input type="submit" class="btn btn-success">
+      </div>
+    </form>
+  </div>
+
+</body>
