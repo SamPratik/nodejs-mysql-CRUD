@@ -15,10 +15,10 @@ var connect = mysql.createPool({
   database: 'nodejs_crud'
 });
 
+
 // read item functionality added...
 app.get('/items', function(req, res) {
   var select_items = "SELECT * FROM items";
-
   // establishing connection...
   connect.getConnection(function(err, connection) {
     connection.query(select_items, function(err, data) {
@@ -36,9 +36,11 @@ app.get('/items', function(req, res) {
 
 });
 
+
 app.get('/add-item', function(req, res) {
   res.render('add-item');
 });
+
 
 // add item functionality...
 app.post('/add-item', urlencodedParser,  function(req, res) {
@@ -50,17 +52,19 @@ app.post('/add-item', urlencodedParser,  function(req, res) {
         console.log(err);
       } else {
         console.log('item added Successfully!');
+        // redirecting to '/items' path...
+        res.redirect('/items');
       }
     });
   });
   console.log(req.body);
 });
 
+
 // returning edit item prepopulated form...
 app.get('/edit-item', function(req, res) {
   var itemId = req.query.id;
   var edit_item = "SELECT * FROM items WHERE id=" + itemId;
-
   // establishing connection...
   connect.getConnection(function(err, connection) {
     connection.query(edit_item, function(err, data) {
@@ -75,6 +79,7 @@ app.get('/edit-item', function(req, res) {
   });
 });
 
+
 // update item functionality...
 app.post('/edit-item', urlencodedParser, function(req, res) {
   var fn = req.body.fn;
@@ -82,21 +87,38 @@ app.post('/edit-item', urlencodedParser, function(req, res) {
   var email = req.body.email;
   var id = req.body.id;
   var update_item = "UPDATE items SET first_name=?, last_name=?, email=? WHERE id=?";
-
   connect.getConnection(function(err, connection) {
     connection.query(update_item, [fn, ln, email, id], function(err, connection) {
       if(err) {
         console.log(err);
       } else {
         console.log('Item updated Successfully!');
+        // redirecting to '/items' path...
+        res.redirect('/items');
       }
     });
   });
 });
 
+
+// Delete item functionality...
 app.get('/delete-item', function(req, res) {
-  console.log(req.query);
+  var itemId = req.query.id;
+  var delete_item = "DELETE FROM items WHERE id=?";
+  connect.getConnection(function(err, connection) {
+    connection.query(delete_item, [itemId], function(err, connection) {
+      if(err) {
+        console.log(err);
+      } else {
+        console.log('Item has been deleted');
+        // redirecting to '/items' path after deletion of item...
+        res.redirect('/items');
+      }
+    });
+  });
+  console.log(itemId);
 });
+
 
 console.log('listening to port 3000...');
 app.listen(3000);
