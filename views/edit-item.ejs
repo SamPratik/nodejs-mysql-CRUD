@@ -2,21 +2,24 @@
 <body>
   <% include partials/nav %>
 
+  <% var item = JSON.parse(item); %>
+
   <div class="container col-md-6 offset-md-3">
     <h2 class="text-center">Edit Item</h2>
     <form class="" action="/edit-item" method="post">
       <div class="form-group">
         <label for="">First Name:</label>
-        <input name="fn" type="text" class="form-control" placeholder="">
+        <input name="fn" type="text" class="form-control" placeholder="" value="<%= item[0].first_name %>">
       </div>
       <div class="form-group">
         <label for="">Last Name:</label>
-        <input name="ln" type="text" class="form-control" placeholder="">
+        <input name="ln" type="text" class="form-control" placeholder="" value="<%= item[0].last_name %>">
       </div>
       <div class="form-group">
         <label for="">Email:</label>
-        <input type="email" name="email" class="form-control" placeholder="">
+        <input type="email" name="email" class="form-control" placeholder="" value="<%= item[0].email %>">
       </div>
+      <input type="hidden" name="id" value="<%= item[0].id %>" />
       <div class="form-group">
         <input type="submit" class="btn btn-success">
       </div>

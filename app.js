@@ -56,15 +56,42 @@ app.post('/add-item', urlencodedParser,  function(req, res) {
   console.log(req.body);
 });
 
+// returning edit item prepopulated form...
 app.get('/edit-item', function(req, res) {
   var itemId = req.query.id;
-  // var edit_item = "SELECT * FROM items WHERE id=" + itemId;
-  console.log(itemId);
-  res.render('edit-item');
+  var edit_item = "SELECT * FROM items WHERE id=" + itemId;
+
+  // establishing connection...
+  connect.getConnection(function(err, connection) {
+    connection.query(edit_item, function(err, data) {
+        if(err) {
+          console.log(err);
+        } else {
+          var item = JSON.stringify(data);
+          console.log(item);
+          res.render('edit-item', {item: item});
+        }
+    });
+  });
 });
 
+// update item functionality...
 app.post('/edit-item', urlencodedParser, function(req, res) {
-  console.log(req.body);
+  var fn = req.body.fn;
+  var ln = req.body.ln;
+  var email = req.body.email;
+  var id = req.body.id;
+  var update_item = "UPDATE items SET first_name=?, last_name=?, email=? WHERE id=?";
+
+  connect.getConnection(function(err, connection) {
+    connection.query(update_item, [fn, ln, email, id], function(err, connection) {
+      if(err) {
+        console.log(err);
+      } else {
+        console.log('Item updated Successfully!');
+      }
+    });
+  });
 });
 
 app.get('/delete-item', function(req, res) {
