@@ -14,36 +14,21 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-            <td>
-              <a href="/edit-item?id=1" class="btn btn-warning">Edit</a>
-              <a href="/delete-item?id=1" class="btn btn-danger">Delete</a>
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-            <td>
-              <button type="button" class="btn btn-warning">Edit</button>
-              <button type="button" class="btn btn-danger">Delete</button>
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-            <td>
-              <button type="button" class="btn btn-warning">Edit</button>
-              <button type="button" class="btn btn-danger">Delete</button>
-            </td>
-          </tr>
+          <%# Parsing 'items' JSON string %>
+          <% var items = JSON.parse(items); %>
+          <%# Looping through 'items' object %>
+          <% for(i=0; i<items.length; i++) { %>
+            <tr>
+              <th scope="row"><%= items[i].id %></th>
+              <td><%= items[i].first_name %></td>
+              <td><%= items[i].last_name %></td>
+              <td><%= items[i].email %></td>
+              <td>
+                <a href="/edit-item?id=<%= items[i].id %>" class="btn btn-warning">Edit</a>
+                <a href="/delete-item?id=<%= items[i].id %>" class="btn btn-danger">Delete</a>
+              </td>
+            </tr>
+          <% } %>
         </tbody>
       </table>
     </div>

@@ -7,6 +7,7 @@ app.set('view engine', 'ejs');
 
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
+// mysql connection...
 var connect = mysql.createPool({
   host: 'localhost',
   user: 'root',
@@ -14,14 +15,32 @@ var connect = mysql.createPool({
   database: 'nodejs_crud'
 });
 
+// read item functionality added...
 app.get('/items', function(req, res) {
-  res.render('items');
+  var select_items = "SELECT * FROM items";
+
+  // establishing connection...
+  connect.getConnection(function(err, connection) {
+    connection.query(select_items, function(err, data) {
+      if(err) {
+        console.log(err);
+      } else {
+        //releasing connection
+        connection.release();
+        var items = JSON.stringify(data);
+        console.log(items);
+        res.render('items', {items: items});
+      }
+    });
+  });
+
 });
 
 app.get('/add-item', function(req, res) {
   res.render('add-item');
 });
 
+// add item functionality...
 app.post('/add-item', urlencodedParser,  function(req, res) {
   var insert_item = "INSERT INTO items(first_name, last_name, email) VALUE (?, ?, ?)";
   // establishing connection...
@@ -38,7 +57,9 @@ app.post('/add-item', urlencodedParser,  function(req, res) {
 });
 
 app.get('/edit-item', function(req, res) {
-  console.log(req.query);
+  var itemId = req.query.id;
+  // var edit_item = "SELECT * FROM items WHERE id=" + itemId;
+  console.log(itemId);
   res.render('edit-item');
 });
 
